@@ -1,0 +1,60 @@
+@model  DXCustomConnectionStringsConfiguration.Models.DesignerModel
+@using DevExpress.DataAccess.Sql;
+@using SqlDataSource = DevExpress.DataAccess.Sql.SqlDataSource;
+
+<link href="~/node_modules/jquery-ui-dist/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/node_modules/devextreme/dist/css/dx.common.css" rel="stylesheet" />
+<link href="~/node_modules/devextreme/dist/css/dx.light.css" rel="stylesheet" />
+<link href="~/node_modules/@@devexpress/analytics-core/dist/css/dx-analytics.common.css" rel="stylesheet" />
+<link href="~/node_modules/@@devexpress/analytics-core/dist/css/dx-analytics.light.css" rel="stylesheet" />
+<link href="~/node_modules/@@devexpress/analytics-core/dist/css/dx-querybuilder.css" rel="stylesheet" />
+<link href="~/node_modules/devexpress-reporting/dist/css/dx-reportdesigner.css" rel="stylesheet" />
+<link href="~/node_modules/devexpress-reporting/dist/css/dx-webdocumentviewer.css" rel="stylesheet" />
+
+<!-- 3rd-party dependencies -->
+<script src="~/node_modules/jquery/dist/jquery.js"></script>
+<script src="~/node_modules/jquery-ui-dist/jquery-ui.js"></script>
+<script src="~/node_modules/knockout/build/output/knockout-latest.js"></script>
+<script src="~/node_modules/ace-builds/src-min-noconflict/ace.js"></script>
+<script src="~/node_modules/ace-builds/src-min-noconflict/ext-language_tools.js"></script>
+<script src="~/node_modules/ace-builds/src-min-noconflict/theme-dreamweaver.js"></script>
+<script src="~/node_modules/ace-builds/src-min-noconflict/theme-ambiance.js"></script>
+<script src="~/node_modules/ace-builds/src-min-noconflict/snippets/text.js"></script>
+<script src="~/node_modules/cldrjs/dist/cldr.js"></script>
+<script src="~/node_modules/cldrjs/dist/cldr/event.js"></script>
+<script src="~/node_modules/cldrjs/dist/cldr/supplemental.js"></script>
+<script src="~/node_modules/cldrjs/dist/cldr/unresolved.js"></script>
+<script src="~/node_modules/globalize/dist/globalize.js"></script>
+<script src="~/node_modules/globalize/dist/globalize/message.js"></script>
+<script src="~/node_modules/globalize/dist/globalize/number.js"></script>
+<script src="~/node_modules/globalize/dist/globalize/currency.js"></script>
+<script src="~/node_modules/globalize/dist/globalize/date.js"></script>
+
+<script src="~/node_modules/devextreme/dist/js/dx.all.js"></script>
+<script src="~/node_modules/@@devexpress/analytics-core/dist/js/dx-analytics-core.min.js"></script>
+<script src="~/node_modules/@@devexpress/analytics-core/dist/js/dx-querybuilder.min.js"></script>
+<script src="~/node_modules/devexpress-reporting/dist/js/dx-webdocumentviewer.min.js"></script>
+<script src="~/node_modules/devexpress-reporting/dist/js/dx-reportdesigner.min.js"></script>
+
+@functions {
+    public void addDataSource(string connectionStringName, string displayName, SelectQuery query)
+    {
+        SqlDataSource ds = new SqlDataSource(connectionStringName);
+        ds.Queries.Add(query);
+        ds.RebuildResultSchema();
+        Model.DataSources.Add(displayName, ds);
+    }
+}
+
+@(Html.DevExpress().ReportDesigner("reportDesigner")
+    .Height("1000px")
+        .DataSources(dataSources =>
+        {
+            Model.DataSources = dataSources;
+            addDataSource("NorthwindFromJson", "Northwind", SelectQueryFluentBuilder.AddTable("Products").SelectAllColumnsFromTable().Build("Products"));
+            addDataSource("CountriesFromEnvJson", "Countries", SelectQueryFluentBuilder.AddTable("Regions").SelectAllColumnsFromTable().Build("Regions"));
+            addDataSource("VehiclesInMemory", "Vehicles", SelectQueryFluentBuilder.AddTable("Model").SelectAllColumnsFromTable().Build("Model"));
+            addDataSource("CarsFromXml", "Cars", SelectQueryFluentBuilder.AddTable("Cars").SelectAllColumnsFromTable().Build("Cars"));
+
+        })
+        .Bind("Report"))
