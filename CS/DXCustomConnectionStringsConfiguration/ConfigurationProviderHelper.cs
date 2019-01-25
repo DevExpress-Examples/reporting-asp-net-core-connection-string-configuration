@@ -4,10 +4,12 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DXCustomConnectionStringsConfiguration
-{
-    public class ConfigurationProviderHelper
-    {
+namespace DXCustomConnectionStringsConfiguration {
+    public class ConfigurationProviderHelper {
+        bool isProduction;
+        public ConfigurationProviderHelper(bool isProduction = false) {
+            this.isProduction = isProduction;
+        }
         public void AssignConnectionStrings(IConfigurationRoot configuration) {
             var globalConnectionStrings = configuration
                 .GetSection("ConnectionStrings")
@@ -16,16 +18,19 @@ namespace DXCustomConnectionStringsConfiguration
             DefaultConnectionStringProvider.AssignConnectionStrings(globalConnectionStrings);
         }
         public IConfigurationBuilder GetConfigurationBuilder(string contentRootPath, IHostingEnvironment hostingEnvironment) {
-            return new ConfigurationBuilder()
+            var builder = new ConfigurationBuilder()
                     .SetBasePath(contentRootPath)
                     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                    .AddXmlFile("customConfig.xml", optional: true, reloadOnChange: false)
-                    .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", optional: true)
-                    .AddInMemoryCollection(new Dictionary<string, string>()
-                    {
+                    .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", optional: true);
+            if(!this.isProduction) {
+                builder
+                    .AddInMemoryCollection(new Dictionary<string, string>() {
                         [$"ConnectionStrings:VehiclesInMemory"] = "XpoProvider=SQLite;Data Source=Data/vehicles.db"
                     })
-                    .AddEnvironmentVariables();
+                    .AddXmlFile("customConfig.xml", optional: true, reloadOnChange: false);
+            }
+            builder.AddEnvironmentVariables();
+            return builder;
         }
     }
 }

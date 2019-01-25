@@ -8,10 +8,8 @@ using System.ServiceModel;
 using DevExpress.XtraReports.Web.Extensions;
 using DevExpress.XtraReports.UI;
 
-namespace DXCustomConnectionStringsConfiguration
-{
-    public class ReportStorageWebExtension1 : DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension
-    {
+namespace DXCustomConnectionStringsConfiguration {
+    public class ReportStorageWebExtension1 : DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension {
         readonly string reportDirectory;
         const string FileExtension = ".repx";
         public ReportStorageWebExtension1(string reportDirectory) {
@@ -38,12 +36,12 @@ namespace DXCustomConnectionStringsConfiguration
             // Returns report layout data stored in a Report Storage using the specified URL. 
             // This method is called only for valid URLs after the IsValidUrl method is called.
             try {
-                using (var reportFile = File.Open(Path.Combine(reportDirectory, url + FileExtension), FileMode.Open))
-                  using (var memoryStream = new MemoryStream()) {
-                      reportFile.CopyTo(memoryStream);
-                      return memoryStream.ToArray();
-                  }
-            } catch (Exception) {
+                using(var reportFile = File.Open(Path.Combine(reportDirectory, url + FileExtension), FileMode.Open))
+                using(var memoryStream = new MemoryStream()) {
+                    reportFile.CopyTo(memoryStream);
+                    return memoryStream.ToArray();
+                }
+            } catch(Exception) {
                 throw new FaultException(new FaultReason(string.Format("Could not find report '{0}'.", url)), new FaultCode("Server"), "GetData");
             }
         }
@@ -61,7 +59,7 @@ namespace DXCustomConnectionStringsConfiguration
         public override void SetData(XtraReport report, string url) {
             // Stores the specified report to a Report Storage using the specified URL. 
             // This method is called only after the IsValidUrl and CanSetData methods are called.
-            using (var reportFile = File.Open(Path.Combine(reportDirectory, url + FileExtension), FileMode.OpenOrCreate)) {
+            using(var reportFile = File.Open(Path.Combine(reportDirectory, url + FileExtension), FileMode.OpenOrCreate)) {
                 report.SaveLayoutToXml(reportFile);
             }
         }
