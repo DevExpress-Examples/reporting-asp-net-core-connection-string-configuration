@@ -1,21 +1,26 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace DXCustomConnectionStringsConfiguration {
     public class Program {
+        public static Dictionary<string, string> connectionStrings = new Dictionary<string, string> {
+                [$"ConnectionStrings:VehiclesInMemory"] = "XpoProvider=SQLite;Data Source=Data/vehicles.db"
+        };
+
+        public static ConfigurationProviderHelper configurationProviderHelper = new ConfigurationProviderHelper();
+
         public static void Main(string[] args) {
             CreateWebHostBuilder(args).Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) {
+            var configuration = configurationProviderHelper.builder
+            .AddInMemoryCollection(connectionStrings)
+            .Build();
             return WebHost.CreateDefaultBuilder(args)
+                .UseConfiguration(configuration)
                 .UseStartup<Startup>();
         }
     }

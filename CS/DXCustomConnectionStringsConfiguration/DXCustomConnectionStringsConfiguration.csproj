@@ -7,9 +7,6 @@
     <EmbeddedResource Include="Reports\Report.repx" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Reports\XtraReport.repx" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.109.2" />
     <PackageReference Include="DevExpress.AspNetCore.Reporting" Version="18.2.3" />
