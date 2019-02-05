@@ -24,11 +24,8 @@ namespace DXCustomConnectionStringsConfiguration {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             services.AddDevExpressControls();
-            var configurationProviderHelper = new ConfigurationProviderHelper(hostingEnvironment.IsProduction());
-            var configurationBuilder = configurationProviderHelper.GetConfigurationBuilder(contentRootPath, hostingEnvironment);
+            var configurationBuilder = Program.configurationProviderHelper.SetUpBuilder(contentRootPath, hostingEnvironment);
             var reportCustomConfiguration = configurationBuilder.Build();
-            // configurationProviderHelper.AssignConnectionStrings(reportCustomConfiguration);
-
             services.ConfigureReportingServices((builder) => {
                 IConfigurationSection connectionStringsSection = reportCustomConfiguration.GetSection("ConnectionStrings");
                 builder.ConfigureReportDesigner(designer => {
@@ -47,10 +44,9 @@ namespace DXCustomConnectionStringsConfiguration {
             DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension.RegisterExtensionGlobal(new ReportStorageWebExtension1(reportDirectory));
             DevExpress.XtraReports.Configuration.Settings.Default.UserDesignerOptions.DataBindingMode = DevExpress.XtraReports.UI.DataBindingMode.Expressions;
             app.UseDevExpressControls();
-            var configurationProviderHelper = new ConfigurationProviderHelper(hostingEnvironment.IsProduction());
-            var configurationBuilder = configurationProviderHelper.GetConfigurationBuilder(contentRootPath, hostingEnvironment);
+            var configurationBuilder = Program.configurationProviderHelper.SetUpBuilder(contentRootPath, hostingEnvironment);
             var reportCustomConfiguration = configurationBuilder.Build();
-            configurationProviderHelper.AssignConnectionStrings(reportCustomConfiguration);
+            Program.configurationProviderHelper.AssignConnectionStrings(reportCustomConfiguration);
             if(env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }

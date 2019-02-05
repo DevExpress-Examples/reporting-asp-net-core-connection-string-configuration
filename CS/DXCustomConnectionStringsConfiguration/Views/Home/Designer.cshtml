@@ -1,7 +1,4 @@
 @model DXCustomConnectionStringsConfiguration.Models.DesignerModel
-@using DevExpress.DataAccess.Sql;
-@using SqlDataSource = DevExpress.DataAccess.Sql.SqlDataSource;
-@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
 
 <link href="~/node_modules/jquery-ui-dist/jquery-ui.min.css" rel="stylesheet" />
 <link href="~/node_modules/devextreme/dist/css/dx.common.css" rel="stylesheet" />
@@ -37,24 +34,11 @@
 <script src="~/node_modules/devexpress-reporting/dist/js/dx-webdocumentviewer.min.js"></script>
 <script src="~/node_modules/devexpress-reporting/dist/js/dx-reportdesigner.min.js"></script>
 
-@functions {
-public void addDataSource(string connectionStringName, string displayName, SelectQuery query) {
-    SqlDataSource ds = new SqlDataSource(connectionStringName);
-    ds.Queries.Add(query);
-    ds.RebuildResultSchema();
-    Model.DataSources.Add(displayName, ds);
-}
-}
-
 @(Html.DevExpress().ReportDesigner("reportDesigner")
             .Height("1000px")
-                .DataSources(dataSources => {
-                    Model.DataSources = dataSources;
-                    addDataSource("NorthwindFromJson", "Northwind", SelectQueryFluentBuilder.AddTable("Products").SelectAllColumnsFromTable().Build("Products"));
-                    addDataSource($"Countries{hostingEnv.EnvironmentName}FromEnvJson", "Countries", SelectQueryFluentBuilder.AddTable("Regions").SelectAllColumnsFromTable().Build("Regions"));
-                    if(hostingEnv.EnvironmentName == "Development") {
-                        addDataSource("VehiclesInMemory", "Vehicles", SelectQueryFluentBuilder.AddTable("Model").SelectAllColumnsFromTable().Build("Model"));
-                        addDataSource("CarsFromXml", "Cars", SelectQueryFluentBuilder.AddTable("Cars").SelectAllColumnsFromTable().Build("Cars"));
+                .DataSources(ds => {
+                    foreach(var item in Model.DataSources) {
+                        ds.Add(item.Key, item.Value);
                     }
                 })
-                .Bind("Report"))
+                .Bind(Model.ReportID))
