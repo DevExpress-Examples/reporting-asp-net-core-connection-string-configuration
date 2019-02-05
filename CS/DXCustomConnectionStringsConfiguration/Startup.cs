@@ -1,6 +1,7 @@
 using System.IO;
 using DevExpress.AspNetCore;
 using DevExpress.AspNetCore.Reporting;
+using DevExpress.DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -11,11 +12,14 @@ namespace DXCustomConnectionStringsConfiguration {
     public class Startup {
         string contentRootPath;
         IHostingEnvironment hostingEnvironment;
+        readonly ConfigurationProviderHelper configurationProvider;
+
         public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment) {
             Configuration = configuration;
             FileProvider = hostingEnvironment.ContentRootFileProvider;
             contentRootPath = hostingEnvironment.ContentRootPath;
             this.hostingEnvironment = hostingEnvironment;
+            this.configurationProvider = new ConfigurationProviderHelper(hostingEnvironment);
         }
 
         public IFileProvider FileProvider { get; }
@@ -24,15 +28,11 @@ namespace DXCustomConnectionStringsConfiguration {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             services.AddDevExpressControls();
-            var configurationBuilder = Program.configurationProviderHelper.SetUpBuilder(contentRootPath, hostingEnvironment);
-            var reportCustomConfiguration = configurationBuilder.Build();
             services.ConfigureReportingServices((builder) => {
-                IConfigurationSection connectionStringsSection = reportCustomConfiguration.GetSection("ConnectionStrings");
                 builder.ConfigureReportDesigner(designer => {
-                    designer.RegisterDataSourceWizardConfigurationConnectionStringsProvider(connectionStringsSection);
+                    designer.RegisterDataSourceWizardConfigurationConnectionStringsProvider(configurationProvider.GetReportDesignerWizardConfigurationSection());
                 });
             });
-
             services
                 .AddMvc()
                 .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
@@ -44,9 +44,7 @@ namespace DXCustomConnectionStringsConfiguration {
             DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension.RegisterExtensionGlobal(new ReportStorageWebExtension1(reportDirectory));
             DevExpress.XtraReports.Configuration.Settings.Default.UserDesignerOptions.DataBindingMode = DevExpress.XtraReports.UI.DataBindingMode.Expressions;
             app.UseDevExpressControls();
-            var configurationBuilder = Program.configurationProviderHelper.SetUpBuilder(contentRootPath, hostingEnvironment);
-            var reportCustomConfiguration = configurationBuilder.Build();
-            Program.configurationProviderHelper.AssignConnectionStrings(reportCustomConfiguration);
+            DefaultConnectionStringProvider.AssignConnectionStrings(() => configurationProvider.GetGlobalConnectionStrings());
             if(env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }

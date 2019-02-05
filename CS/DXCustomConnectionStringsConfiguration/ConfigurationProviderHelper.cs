@@ -1,32 +1,38 @@
-﻿using DevExpress.DataAccess;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using System.Linq;
 
 namespace DXCustomConnectionStringsConfiguration {
     public class ConfigurationProviderHelper {
-        public ConfigurationBuilder builder;
-        public ConfigurationProviderHelper() {
-            builder = new ConfigurationBuilder();
+        readonly IHostingEnvironment hostingEnvironment;
+        public ConfigurationProviderHelper(IHostingEnvironment hostingEnvironment) {
+            this.hostingEnvironment = hostingEnvironment;
         }
-        public void AssignConnectionStrings(IConfigurationRoot configuration) {
-            var globalConnectionStrings = configuration
+        public IDictionary<string, string> GetGlobalConnectionStrings() {
+            var connectionStrings = new Dictionary<string, string> {
+                [$"ConnectionStrings:VehiclesInMemory"] = "XpoProvider=SQLite;Data Source=Data/vehicles.db",
+                [$"ConnectionStrings:CarsInMemory"] = "XpoProvider=SQLite;Data Source=Data/cars.db;"
+            };
+            return new ConfigurationBuilder()
+                .SetBasePath(hostingEnvironment.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", optional: true)
+                .AddInMemoryCollection(connectionStrings)
+                .AddEnvironmentVariables()
+                .Build()
                 .GetSection("ConnectionStrings")
                 .AsEnumerable(true)
                 .ToDictionary(x => x.Key, x => x.Value);
-            DefaultConnectionStringProvider.AssignConnectionStrings(globalConnectionStrings);
         }
-        public IConfigurationBuilder SetUpBuilder(string contentRootPath, IHostingEnvironment hostingEnvironment) {
-            builder
-                .SetBasePath(contentRootPath)
+
+        public IConfigurationSection GetReportDesignerWizardConfigurationSection() {
+            return new ConfigurationBuilder()
+                .SetBasePath(hostingEnvironment.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", optional: true);
-            if(!hostingEnvironment.IsProduction()) {
-                builder
-                    .AddXmlFile("customConfig.xml", optional: true, reloadOnChange: false);
-            }
-            builder.AddEnvironmentVariables();
-            return builder;
+                .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", optional: true)
+                .Build()
+                .GetSection("ConnectionStrings");
         }
     }
 }
