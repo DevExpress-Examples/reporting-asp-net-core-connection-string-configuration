@@ -1,6 +1,0 @@
-<?xml version="1.0" standalone="yes"?>
-<configuration>
-<ConnectionStrings>
-	<CarsFromXml>XpoProvider=SQLite;Data Source=Data/cars.db;</CarsFromXml>
-</ConnectionStrings>
-</configuration>

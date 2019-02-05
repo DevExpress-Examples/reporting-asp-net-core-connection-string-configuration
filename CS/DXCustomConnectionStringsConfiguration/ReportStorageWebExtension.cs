@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.ServiceModel;
-using DevExpress.XtraReports.Web.Extensions;
 using DevExpress.XtraReports.UI;
 
 namespace DXCustomConnectionStringsConfiguration {
@@ -36,11 +33,7 @@ namespace DXCustomConnectionStringsConfiguration {
             // Returns report layout data stored in a Report Storage using the specified URL. 
             // This method is called only for valid URLs after the IsValidUrl method is called.
             try {
-                using(var reportFile = File.Open(Path.Combine(reportDirectory, url + FileExtension), FileMode.Open))
-                using(var memoryStream = new MemoryStream()) {
-                    reportFile.CopyTo(memoryStream);
-                    return memoryStream.ToArray();
-                }
+                return File.ReadAllBytes(Path.Combine(reportDirectory, url + FileExtension));
             } catch(Exception) {
                 throw new FaultException(new FaultReason(string.Format("Could not find report '{0}'.", url)), new FaultCode("Server"), "GetData");
             }
