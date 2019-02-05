@@ -12,14 +12,14 @@ namespace DXCustomConnectionStringsConfiguration {
     public class Startup {
         string contentRootPath;
         IHostingEnvironment hostingEnvironment;
-        readonly ConfigurationProviderHelper configurationProvider;
+        readonly CustomConfigurationProvider configurationProvider;
 
         public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment) {
             Configuration = configuration;
             FileProvider = hostingEnvironment.ContentRootFileProvider;
             contentRootPath = hostingEnvironment.ContentRootPath;
             this.hostingEnvironment = hostingEnvironment;
-            this.configurationProvider = new ConfigurationProviderHelper(hostingEnvironment);
+            this.configurationProvider = new CustomConfigurationProvider(hostingEnvironment);
         }
 
         public IFileProvider FileProvider { get; }
