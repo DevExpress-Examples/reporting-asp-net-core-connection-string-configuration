@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
 namespace DXCustomConnectionStringsConfiguration {
-    public class ConfigurationProviderHelper {
+    public class CustomConfigurationProvider {
         readonly IHostingEnvironment hostingEnvironment;
-        public ConfigurationProviderHelper(IHostingEnvironment hostingEnvironment) {
+        public CustomConfigurationProvider(IHostingEnvironment hostingEnvironment) {
             this.hostingEnvironment = hostingEnvironment;
         }
         public IDictionary<string, string> GetGlobalConnectionStrings() {
