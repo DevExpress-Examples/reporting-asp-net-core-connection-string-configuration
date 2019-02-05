@@ -36,5 +36,9 @@
 
 @(Html.DevExpress().ReportDesigner("reportDesigner")
             .Height("1000px")
-                .DataSources(Model.DataSources)
+                .DataSources(ds => {
+                    foreach(var item in Model.DataSources) {
+                        ds.Add(item.Key, item.Value);
+                    }
+                })
                 .Bind(Model.ReportID))

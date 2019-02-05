@@ -15,7 +15,7 @@ namespace DXCustomConnectionStringsConfiguration.Controllers {
         }
 
         public IActionResult Designer() {
-            return View(new DesignerModel { ReportID = "Report", DataSources = setAvailableDataSources });
+            return View(new DesignerModel { ReportID = "Report", DataSources = getAvailableDataSources() });
         }
 
         SqlDataSource createDataSource(string connectionStringName, SelectQuery query) {
@@ -25,13 +25,15 @@ namespace DXCustomConnectionStringsConfiguration.Controllers {
             return ds;
         }
 
-        public void setAvailableDataSources(Dictionary<string, object> dataSources) {
+        public Dictionary<string, object> getAvailableDataSources() {
+            var dataSources = new Dictionary<string, object>();
             dataSources.Add("Northwind", createDataSource("NorthwindFromJson", SelectQueryFluentBuilder.AddTable("Products").SelectAllColumnsFromTable().Build("Products")));
             dataSources.Add("Countries", createDataSource($"Countries{_env.EnvironmentName}FromEnvJson", SelectQueryFluentBuilder.AddTable("Regions").SelectAllColumnsFromTable().Build("Regions")));
             dataSources.Add("Vehicles", createDataSource("VehiclesInMemory", SelectQueryFluentBuilder.AddTable("Model").SelectAllColumnsFromTable().Build("Model")));
             if(_env.EnvironmentName == "Development") {
                 dataSources.Add("Cars", createDataSource("CarsFromXml", SelectQueryFluentBuilder.AddTable("Cars").SelectAllColumnsFromTable().Build("Cars")));
             }
+            return dataSources;
         }
     }
 }
