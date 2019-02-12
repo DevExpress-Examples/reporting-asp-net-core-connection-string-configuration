@@ -11,8 +11,8 @@ namespace DXCustomConnectionStringsConfiguration {
         }
         public IDictionary<string, string> GetGlobalConnectionStrings() {
             var connectionStrings = new Dictionary<string, string> {
-                [$"ConnectionStrings:VehiclesInMemory"] = "XpoProvider=SQLite;Data Source=Data/vehicles.db",
-                [$"ConnectionStrings:CarsInMemory"] = "XpoProvider=SQLite;Data Source=Data/cars.db;"
+                [$"ConnectionStrings:Vehicles_InMemory"] = "XpoProvider=SQLite;Data Source=Data/vehicles.db",
+                [$"ConnectionStrings:Cars_InMemory"] = "XpoProvider=SQLite;Data Source=Data/cars.db;"
             };
             return new ConfigurationBuilder()
                 .SetBasePath(hostingEnvironment.ContentRootPath)

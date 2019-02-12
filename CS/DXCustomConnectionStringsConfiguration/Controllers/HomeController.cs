@@ -22,10 +22,10 @@ namespace DXCustomConnectionStringsConfiguration.Controllers {
 
         public Dictionary<string, object> GetAvailableDataSources() {
             var dataSources = new Dictionary<string, object>();
-            dataSources.Add("Northwind", CreateDataSource("NorthwindFromJson", SelectQueryFluentBuilder.AddTable("Products").SelectAllColumnsFromTable().Build("Products")));
-            dataSources.Add("Countries", CreateDataSource("CountriesDevelopmentFromJson", SelectQueryFluentBuilder.AddTable("Regions").SelectAllColumnsFromTable().Build("Regions")));
-            dataSources.Add("Vehicles", CreateDataSource("VehiclesInMemory", SelectQueryFluentBuilder.AddTable("Model").SelectAllColumnsFromTable().Build("Model")));
-            dataSources.Add("Cars", CreateDataSource("CarsInMemory", SelectQueryFluentBuilder.AddTable("Cars").SelectAllColumnsFromTable().Build("Cars")));
+            dataSources.Add("Northwind", CreateDataSource("Northwind_Json", SelectQueryFluentBuilder.AddTable("Products").SelectAllColumnsFromTable().Build("Products")));
+            dataSources.Add("Countries", CreateDataSource("Countries_DevelopmentJson", SelectQueryFluentBuilder.AddTable("Regions").SelectAllColumnsFromTable().Build("Regions")));
+            dataSources.Add("Vehicles", CreateDataSource("Vehicles_InMemory", SelectQueryFluentBuilder.AddTable("Model").SelectAllColumnsFromTable().Build("Model")));
+            dataSources.Add("Cars", CreateDataSource("Cars_InMemory", SelectQueryFluentBuilder.AddTable("Cars").SelectAllColumnsFromTable().Build("Cars")));
             return dataSources;
         }
     }
