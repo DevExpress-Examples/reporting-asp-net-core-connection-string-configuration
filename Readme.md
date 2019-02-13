@@ -8,7 +8,7 @@ This example demonstrates how to get connection strings from a set of different 
 
 **Register Connection Strings Globally**
 
-To register connection strings from a custom configuration globally, call the static **DefaultConnectionStringProvider.AssignConnectionStrings** method at the application startup.
+To register connection strings from a custom configuration globally, call the static **DevExpress.DataAccess.DefaultConnectionStringProvider.AssignConnectionStrings** method at the application startup.
 
 These connection strings are available for the Report Designer's Preview to fill a report's data source and generate the resulting document.
 
