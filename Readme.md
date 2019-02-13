@@ -1,6 +1,6 @@
 ## Report Designer - How to read connection strings from different configuration sources in an ASP.NET Core application
 
-In .Net Core applications, the default connection string provider implementation searches the **appsettings.json** file in the current directory and reads connection strings from the file’s **ConnectionStrings** section. 
+In .NET Core applications, the default connection string provider implementation searches the **appsettings.json** file in the current directory and reads connection strings from the file’s **ConnectionStrings** section. 
 
 This example demonstrates how to get connection strings from a set of different configuration sources in an ASP.NET Core application. 
 
