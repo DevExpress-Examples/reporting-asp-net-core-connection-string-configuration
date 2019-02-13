@@ -1,7 +1,6 @@
 using System.IO;
 using DevExpress.AspNetCore;
 using DevExpress.AspNetCore.Reporting;
-using DevExpress.DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -44,7 +43,7 @@ namespace DXCustomConnectionStringsConfiguration {
             DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension.RegisterExtensionGlobal(new ReportStorageWebExtension1(reportDirectory));
             DevExpress.XtraReports.Configuration.Settings.Default.UserDesignerOptions.DataBindingMode = DevExpress.XtraReports.UI.DataBindingMode.Expressions;
             app.UseDevExpressControls();
-            DefaultConnectionStringProvider.AssignConnectionStrings(() => configurationProvider.GetGlobalConnectionStrings());
+            DevExpress.DataAccess.DefaultConnectionStringProvider.AssignConnectionStrings(() => configurationProvider.GetGlobalConnectionStrings());
             if(env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
