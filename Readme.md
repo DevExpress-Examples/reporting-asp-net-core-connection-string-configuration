@@ -21,9 +21,7 @@ In this example, global connection strings are read from the following sources:
 
 To provide connection strings from a custom configuration to the Report Designer, call the [ReportDesignerConfigurationBuilder.RegisterDataSourceWizardConfigurationConnectionStringsProvider](https://docs.devexpress.com/XtraReports/DevExpress.AspNetCore.Reporting.ReportDesignerConfigurationBuilder.RegisterDataSourceWizardConfigurationConnectionStringsProvider(IConfigurationSection)) method at the application startup.
 
-These connection strings are displayed in the [SQL Data Source Wizard](https://docs.devexpress.com/XtraReports/114093/create-end-user-reporting-applications/web-reporting/asp-net-webforms-reporting/end-user-report-designer/gui/wizards/sql-data-source-wizard) to create new data sources. 
-
-Note that the SQL Data Source Wizard uses only the specified set of connection strings not including the strings registered globally.
+These connection strings are displayed in the [SQL Data Source Wizard](https://docs.devexpress.com/XtraReports/114093/create-end-user-reporting-applications/web-reporting/asp-net-webforms-reporting/end-user-report-designer/gui/wizards/sql-data-source-wizard) to create new data sources. Note that the SQL Data Source Wizard uses only the specified set of connection strings not including the strings registered globally.
 
 In this example, the Report Designer's connection strings are read from the following files:
 * **appsettings.json** 
