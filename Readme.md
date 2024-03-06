@@ -56,4 +56,3 @@ In this example, the Report Designer's connection strings are read from the foll
 ## More Examples
 
 - [ASP.NET Core Reporting - Best Practices](https://github.com/DevExpress-Examples/AspNetCore.Reporting.BestPractices)
-
